@@ -1,0 +1,97 @@
+/* =======================================================
+   TABLET RESPONSIVE (min-width: 768px)
+   ======================================================= */
+@media screen and (min-width: 768px) {
+  /* Forms */
+  form .form-buttons {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .file-upload-actions {
+    flex-direction: row;
+  }
+
+  /* Story Lists */
+  .stories-list-container,
+  .reports-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Detail Pages */
+  .story-detail-image,
+  .report-detail__images {
+    height: 450px;
+  }
+
+  /* About Page */
+  .developer-card {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+/* =======================================================
+   DESKTOP RESPONSIVE (min-width: 1024px)
+   ======================================================= */
+@media screen and (min-width: 1024px) {
+  /* General Container */
+  .container {
+    max-width: 1200px;
+  }
+
+  /* Navigation Bar Reset (From Sidebar to Topbar) */
+  .navigation-drawer {
+    min-height: auto;
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    position: static;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .navigation-drawer__navlist-main,
+  .navigation-drawer__navlist {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Menyembunyikan tombol hamburger */
+  .drawer-button {
+    display: none;
+  }
+
+  /* Story Lists */
+  .stories-list-container,
+  .reports-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  /* Detail Pages */
+  .story-detail-image,
+  .report-detail__images {
+    height: 550px;
+  }
+}
+
+/* =======================================================
+   MOBILE TWEAKS (max-width: 768px)
+   ======================================================= */
+@media screen and (max-width: 768px) {
+  /* Memastikan elemen about tetap rapi di layar kecil */
+  .developer-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .new-form-wrapper {
+    padding: 20px; /* Padding form dikurangi agar lebih lega di HP */
+  }
+}
