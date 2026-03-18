@@ -85,92 +85,72 @@ export default class RegisterPage {
 
   #setupForm() {
     const form = document.getElementById("register-form");
-
-    // Tangkap semua input dan error
     const nameInput = document.getElementById("name-input");
-    const nameError = document.getElementById("name-error");
     const emailInput = document.getElementById("email-input");
-    const emailError = document.getElementById("email-error");
     const passwordInput = document.getElementById("password-input");
-    const passwordError = document.getElementById("password-error");
 
-    const validateName = () => {
-      const value = nameInput.value.trim();
-      if (!value) {
-        nameInput.classList.add("is-invalid");
-        nameError.style.display = "flex";
-        return false;
-      } else {
-        nameInput.classList.remove("is-invalid");
-        nameError.style.display = "none";
-        return true;
-      }
-    };
+    nameInput.addEventListener("input", (e) =>
+      this.#presenter.validateName(e.target.value),
+    );
+    nameInput.addEventListener("blur", (e) =>
+      this.#presenter.validateName(e.target.value),
+    );
 
-    const validateEmail = () => {
-      const value = emailInput.value.trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    emailInput.addEventListener("input", (e) =>
+      this.#presenter.validateEmail(e.target.value),
+    );
+    emailInput.addEventListener("blur", (e) =>
+      this.#presenter.validateEmail(e.target.value),
+    );
 
-      if (!value || !emailRegex.test(value)) {
-        emailInput.classList.add("is-invalid");
-        emailError.style.display = "flex";
-        return false;
-      } else {
-        emailInput.classList.remove("is-invalid");
-        emailError.style.display = "none";
-        return true;
-      }
-    };
-
-    const validatePassword = () => {
-      const value = passwordInput.value;
-      if (!value || value.length < 8) {
-        passwordInput.classList.add("is-invalid");
-        passwordError.style.display = "flex";
-        return false;
-      } else {
-        passwordInput.classList.remove("is-invalid");
-        passwordError.style.display = "none";
-        return true;
-      }
-    };
-
-    nameInput.addEventListener("input", validateName);
-    nameInput.addEventListener("blur", validateName);
-
-    emailInput.addEventListener("input", validateEmail);
-    emailInput.addEventListener("blur", validateEmail);
-
-    passwordInput.addEventListener("input", validatePassword);
-    passwordInput.addEventListener("blur", validatePassword);
+    passwordInput.addEventListener("input", (e) =>
+      this.#presenter.validatePassword(e.target.value),
+    );
+    passwordInput.addEventListener("blur", (e) =>
+      this.#presenter.validatePassword(e.target.value),
+    );
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-
-      const isNameValid = validateName();
-      const isEmailValid = validateEmail();
-      const isPasswordValid = validatePassword();
-
-      if (!isNameValid) {
-        nameInput.focus();
-        return;
-      }
-      if (!isEmailValid) {
-        emailInput.focus();
-        return;
-      }
-      if (!isPasswordValid) {
-        passwordInput.focus();
-        return;
-      }
 
       const data = {
         name: nameInput.value.trim(),
         email: emailInput.value.trim(),
         password: passwordInput.value,
       };
+
       await this.#presenter.getRegistered(data);
     });
+  }
+
+  showNameError() {
+    document.getElementById("name-input").classList.add("is-invalid");
+    document.getElementById("name-error").style.display = "flex";
+  }
+
+  hideNameError() {
+    document.getElementById("name-input").classList.remove("is-invalid");
+    document.getElementById("name-error").style.display = "none";
+  }
+
+  showEmailError() {
+    document.getElementById("email-input").classList.add("is-invalid");
+    document.getElementById("email-error").style.display = "flex";
+  }
+
+  hideEmailError() {
+    document.getElementById("email-input").classList.remove("is-invalid");
+    document.getElementById("email-error").style.display = "none";
+  }
+
+  showPasswordError() {
+    document.getElementById("password-input").classList.add("is-invalid");
+    document.getElementById("password-error").style.display = "flex";
+  }
+
+  hidePasswordError() {
+    document.getElementById("password-input").classList.remove("is-invalid");
+    document.getElementById("password-error").style.display = "none";
   }
 
   registeredSuccessfully(message) {

@@ -1,4 +1,8 @@
+import LogoutPresenter from "./logout-presenter";
+
 export default class LogoutPage {
+  #presenter = null;
+
   async render() {
     return `
       <section class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh;">
@@ -9,13 +13,13 @@ export default class LogoutPage {
   }
 
   async afterRender() {
-    setTimeout(() => {
-      localStorage.clear();
-      sessionStorage.clear();
+    this.#presenter = new LogoutPresenter({ view: this });
 
-      window.location.hash = "#/login";
+    this.#presenter.executeLogout();
+  }
 
-      window.location.reload();
-    }, 800);
+  redirectToLogin() {
+    window.location.hash = "#/login";
+    window.location.reload();
   }
 }

@@ -71,7 +71,7 @@ export function generateStoryItemTemplate({
       <div class="story-item__header">
         <div class="story-item__avatar">${name.charAt(0).toUpperCase()}</div>
         <div class="story-item__author-info">
-          <h3 class="story-item__name">${name}</h3>
+          <h2 class="story-item__name">${name}</h2>
           <span class="story-item__date">${dateFormatted}</span>
         </div>
       </div>
@@ -106,7 +106,7 @@ export function generateStoryDetailTemplate({
       </a>
 
       <div class="story-detail-header">
-        <h1 class="story-detail-title">${name}'s Story</h1>
+        <h1 class="story-detail-title">Cerita ${name}</h1>
         <p class="story-detail-date"><i class="fas fa-calendar-alt"></i> Diunggah pada: ${dateFormatted}</p>
       </div>
 
@@ -115,7 +115,7 @@ export function generateStoryDetailTemplate({
       </div>
 
       <div class="story-detail-content">
-        <h2>Kisah di Balik Foto Ini</h2>
+        <h2>Deskripsi</h2>
         <p class="story-detail-description">${description}</p>
       </div>
 
@@ -123,7 +123,7 @@ export function generateStoryDetailTemplate({
         lat && lon
           ? `
         <div class="story-detail-map-box">
-          <h2>Lokasi Kejadian</h2>
+          <h2>Lokasi</h2>
           <div class="map-container-relative">
             <div id="map" class="story-detail-map"></div>
             <div id="map-loading-container"></div>
@@ -131,7 +131,15 @@ export function generateStoryDetailTemplate({
           <p class="story-detail-coords">Latitude: ${lat} | Longitude: ${lon}</p>
         </div>
       `
-          : ""
+          : `
+        <div class="story-detail-map-box">
+          <h2>Lokasi</h2>
+          <div style="background: #f1f5f9; padding: 30px; border-radius: 12px; text-align: center; color: #64748b;">
+            <i class="fas fa-map-marker-slash" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <p>Pengguna tidak menyertakan lokasi pada cerita ini.</p>
+          </div>
+        </div>
+      `
       }
       
       </div>

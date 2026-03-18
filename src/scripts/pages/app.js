@@ -105,7 +105,18 @@ class App {
 
       if (!page) return;
 
-      this.#content.innerHTML = await page.render();
+      const updateDOM = async () => {
+        this.#content.innerHTML = await page.render();
+      };
+
+      if (document.startViewTransition) {
+        const transition = document.startViewTransition(updateDOM);
+
+        await transition.ready;
+      } else {
+        await updateDOM();
+      }
+
       await page.afterRender();
     } catch (error) {
       console.error("Terjadi error saat memuat halaman:", error);

@@ -23,7 +23,11 @@ export default class DetailPresenter {
       const story = response.story;
       console.log("Detail Story:", story);
 
-      this.#view.populateStoryDetailAndInitialMap(response.message, story);
+      this.#view.populateStoryDetail(response.message, story);
+
+      if (story.lat && story.lon) {
+        await this.#view.drawMap(story.lat, story.lon, story.name);
+      }
     } catch (error) {
       console.error("showStoryDetail: error:", error);
       this.#view.populateStoryDetailError(error.message);

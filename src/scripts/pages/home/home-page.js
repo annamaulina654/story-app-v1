@@ -48,22 +48,18 @@ export default class HomePage {
     }
 
     const html = stories.reduce((accumulator, story) => {
-      if (this.#map && story.lat && story.lon) {
-        const coordinate = [story.lat, story.lon];
-        const markerOptions = { alt: `Lokasi cerita dari ${story.name}` };
-        const popupOptions = {
-          content: `<b>${story.name}</b><br>${story.description}`,
-        };
-
-        this.#map.addMarker(coordinate, markerOptions, popupOptions);
-      }
-
       return accumulator.concat(generateStoryItemTemplate(story));
     }, "");
 
     document.getElementById("reports-list").innerHTML = `
-    <div class="stories-list-container">${html}</div>
-  `;
+      <div class="stories-list-container">${html}</div>
+    `;
+  }
+
+  addMapMarker(coordinate, markerOptions, popupOptions) {
+    if (this.#map) {
+      this.#map.addMarker(coordinate, markerOptions, popupOptions);
+    }
   }
 
   populateStoriesListEmpty() {

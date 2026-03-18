@@ -9,7 +9,33 @@ export default class LoginPresenter {
     this.#authModel = authModel;
   }
 
+  validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      this.#view.showEmailError();
+      return false;
+    } else {
+      this.#view.hideEmailError();
+      return true;
+    }
+  }
+
+  validatePassword(password) {
+    if (!password || password.length < 8) {
+      this.#view.showPasswordError();
+      return false;
+    } else {
+      this.#view.hidePasswordError();
+      return true;
+    }
+  }
+
   async getLogin({ email, password }) {
+    const isEmailValid = this.validateEmail(email);
+    const isPasswordValid = this.validatePassword(password);
+
+    if (!isEmailValid || !isPasswordValid) return;
+
     this.#view.showSubmitLoadingButton();
     try {
       const response = await this.#model.getLogin({ email, password });

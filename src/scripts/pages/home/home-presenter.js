@@ -34,6 +34,18 @@ export default class HomePresenter {
       const stories = response.listStory;
 
       this.#view.populateStoriesList(response.message, stories);
+
+      stories.forEach((story) => {
+        if (story.lat && story.lon) {
+          const coordinate = [story.lat, story.lon];
+          const markerOptions = { alt: `Lokasi cerita dari ${story.name}` };
+          const popupOptions = {
+            content: `<b>${story.name}</b><br>${story.description}`,
+          };
+
+          this.#view.addMapMarker(coordinate, markerOptions, popupOptions);
+        }
+      });
     } catch (error) {
       console.error("initialGalleryAndMap: error:", error);
       this.#view.populateStoriesListError(error.message);

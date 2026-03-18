@@ -16,16 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.addEventListener("hashchange", async () => {
     Camera.stopAllStreams();
-
-    if (!document.startViewTransition) {
-      await app.renderPage();
-    } else {
-      const transition = document.startViewTransition(async () => {
-        await app.renderPage();
-      });
-
-      transition.finished.catch(() => {});
-    }
+    await app.renderPage();
   });
 
   await app.renderPage();

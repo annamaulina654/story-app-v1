@@ -139,63 +139,22 @@ export default class NewPage {
     this.#form = document.getElementById("new-form");
 
     const descriptionInput = this.#form.elements.namedItem("description");
-    const descriptionError = document.getElementById("description-error");
 
-    const validateDescription = () => {
-      const value = descriptionInput.value.trim();
-      if (!value) {
-        descriptionInput.classList.add("is-invalid");
-        descriptionError.style.display = "block";
-        return false;
-      } else {
-        descriptionInput.classList.remove("is-invalid");
-        descriptionError.style.display = "none";
-        return true;
-      }
-    };
-
-    descriptionInput.addEventListener("input", validateDescription);
-
-    descriptionInput.addEventListener("blur", validateDescription);
+    descriptionInput.addEventListener("input", (e) =>
+      this.#presenter.validateDescription(e.target.value),
+    );
+    descriptionInput.addEventListener("blur", (e) =>
+      this.#presenter.validateDescription(e.target.value),
+    );
 
     this.#form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const isDescriptionValid = validateDescription();
-
-      if (!isDescriptionValid) {
-        descriptionInput.focus();
-        return;
-      }
-
-      if (!this.#takenPhoto) {
-        Swal.fire({
-          icon: "warning",
-          title: "Foto Belum Ada",
-          text: "Tolong sertakan 1 foto terbaik untuk cerita Anda!",
-          confirmButtonColor: "#4f46e5",
-        });
-        return;
-      }
-
-      if (this.#takenPhoto.blob.size > 1000000) {
-        Swal.fire({
-          icon: "error",
-          title: "Ukuran Terlalu Besar",
-          text: "Maaf, ukuran foto maksimal adalah 1MB.",
-          confirmButtonColor: "#4f46e5",
-        });
-        return;
-      }
-
-      const latitude = this.#form.elements.namedItem("latitude").value;
-      const longitude = this.#form.elements.namedItem("longitude").value;
-
       const data = {
         description: descriptionInput.value.trim(),
-        photo: this.#takenPhoto.blob,
-        lat: latitude,
-        lon: longitude,
+        photo: this.#takenPhoto ? this.#takenPhoto.blob : null,
+        lat: this.#form.elements.namedItem("latitude").value,
+        lon: this.#form.elements.namedItem("longitude").value,
       };
 
       await this.#presenter.storeNewStory(data);
@@ -236,6 +195,35 @@ export default class NewPage {
           '<i class="fas fa-video"></i> Buka Kamera';
         this.#camera.stop();
       });
+  }
+
+  showDescriptionError() {
+    document.getElementById("description-input").classList.add("is-invalid");
+    document.getElementById("description-error").style.display = "block";
+    document.getElementById("description-input").focus();
+  }
+
+  hideDescriptionError() {
+    document.getElementById("description-input").classList.remove("is-invalid");
+    document.getElementById("description-error").style.display = "none";
+  }
+
+  showPhotoMissingWarning() {
+    Swal.fire({
+      icon: "warning",
+      title: "Foto Belum Ada",
+      text: "Tolong sertakan 1 foto terbaik untuk cerita Anda!",
+      confirmButtonColor: "#4f46e5",
+    });
+  }
+
+  showPhotoSizeError() {
+    Swal.fire({
+      icon: "error",
+      title: "Ukuran Terlalu Besar",
+      text: "Maaf, ukuran foto maksimal adalah 1MB.",
+      confirmButtonColor: "#4f46e5",
+    });
   }
 
   async initialMap() {
