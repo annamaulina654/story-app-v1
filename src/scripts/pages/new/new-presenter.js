@@ -49,7 +49,6 @@ export default class NewPresenter {
         this.#view.storeFailed(response.message);
         return;
       }
-
       this.#view.storeSuccessfully(response.message);
     } catch (error) {
       console.error("storeNewStory: error:", error);

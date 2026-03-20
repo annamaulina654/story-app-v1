@@ -3,9 +3,17 @@ import { getActiveRoute } from "../routes/url-parser";
 import {
   generateMainNavigationListTemplate,
   generateAuthenticatedNavigationListTemplate,
+  generateSubscribeButtonTemplate,
   generateUnauthenticatedNavigationListTemplate,
+  generateUnsubscribeButtonTemplate,
 } from "../templates";
+import { isServiceWorkerAvailable } from '../utils';
 import { getAccessToken } from "../utils/auth";
+import {
+  isCurrentPushSubscriptionAvailable,
+  subscribe,
+  unsubscribe,
+} from '../utils/notification-helper';
 
 class App {
   #content = null;
@@ -87,6 +95,29 @@ class App {
     }
   }
 
+  async #setupPushNotification() {
+    const pushNotificationTools = document.getElementById('push-notification-tools');
+    const isSubscribed = await isCurrentPushSubscriptionAvailable();
+ 
+    if (isSubscribed) {
+      pushNotificationTools.innerHTML = generateUnsubscribeButtonTemplate();
+      document.getElementById('unsubscribe-button').addEventListener('click', () => {
+        unsubscribe().finally(() => {
+          this.#setupPushNotification();
+        });
+      });
+ 
+      return;
+    }
+ 
+    pushNotificationTools.innerHTML = generateSubscribeButtonTemplate();
+    document.getElementById('subscribe-button').addEventListener('click', () => {
+      subscribe().finally(() => {
+        this.#setupPushNotification();
+      });
+    });
+  }
+
   async renderPage() {
     this._renderNavigation();
 
@@ -118,6 +149,10 @@ class App {
       }
 
       await page.afterRender();
+
+      if (isServiceWorkerAvailable()) {
+        this.#setupPushNotification();
+      }
     } catch (error) {
       console.error("Terjadi error saat memuat halaman:", error);
     }
